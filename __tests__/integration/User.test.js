@@ -1,28 +1,23 @@
 /* eslint-disable no-undef */
 import request from 'supertest';
-import bcrypt from 'bcryptjs';
 import app from '../../src/app';
 import truncate from '../utils/truncate';
 import User from '../../src/app/models/User';
 
 describe('User', () => {
   beforeEach(async () => {
+    await User.create({
+      name: 'Fernando',
+      email: 'fernando@hotmail.com',
+      password: '123456',
+    });
+  });
+
+  afterEach(async () => {
     await truncate();
   });
 
   describe(' /POST', () => {
-    it('should encrypt user password when new user created', async () => {
-      const user = await User.create({
-        name: 'Rogerio',
-        email: 'rogerio@hotmail.com',
-        password: '123123',
-      });
-
-      const compareHash = await bcrypt.compare('123123', user.password_hash);
-
-      expect(compareHash).toBe(true);
-    });
-
     it('should be able to register', async () => {
       const user = {
         name: 'Rogerio',
@@ -41,18 +36,12 @@ describe('User', () => {
     });
 
     it('should not be able to register with duplicated email ', async () => {
-      const user = await User.create({
-        name: 'Rogerio',
-        email: 'rogerio@hotmail.com',
-        password: '123123',
-      });
-
       const { status, body } = await request(app)
         .post('/users')
         .send({
-          name: user.name,
-          email: user.email,
-          password: user.password,
+          name: 'Fernando',
+          email: 'fernando@hotmail.com',
+          password: '123123',
         });
 
       expect(status).toBe(400);
@@ -125,17 +114,11 @@ describe('User', () => {
     });
 
     it('should not update when wrong password', async () => {
-      const user = await User.create({
-        name: 'Rogerio',
-        email: 'rogerio@hotmail.com',
-        password: '123456',
-      });
-
       const userLogin = await request(app)
         .post('/sessions')
         .send({
-          email: user.email,
-          password: user.password,
+          email: 'fernando@hotmail.com',
+          password: '123456',
         });
 
       const { body } = await request(app)
@@ -151,17 +134,11 @@ describe('User', () => {
     });
 
     it('should update user datas', async () => {
-      const user = await User.create({
-        name: 'Rogerio',
-        email: 'rogerio@hotmail.com',
-        password: '123456',
-      });
-
       const userLogin = await request(app)
         .post('/sessions')
         .send({
-          email: user.email,
-          password: user.password,
+          email: 'fernando@hotmail.com',
+          password: '123456',
         });
 
       const { body } = await request(app)
@@ -199,17 +176,11 @@ describe('User', () => {
       expect(body.error).toBe('Token invalid');
     });
     it('should return user data', async () => {
-      const user = await User.create({
-        name: 'Rogerio',
-        email: 'rogerio@hotmail.com',
-        password: '123456',
-      });
-
       const userLogin = await request(app)
         .post('/sessions')
         .send({
-          email: user.email,
-          password: user.password,
+          email: 'fernando@hotmail.com',
+          password: '123456',
         });
 
       const { body } = await request(app)
@@ -217,8 +188,8 @@ describe('User', () => {
         .set('Authorization', `Bearer ${userLogin.body.token}`)
         .expect(200);
 
-      expect(body.name).toBe('Rogerio');
-      expect(body.email).toBe('rogerio@hotmail.com');
+      expect(body.name).toBe('Fernando');
+      expect(body.email).toBe('fernando@hotmail.com');
     });
   });
 });

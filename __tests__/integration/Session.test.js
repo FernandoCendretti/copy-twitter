@@ -6,21 +6,23 @@ import User from '../../src/app/models/User';
 
 describe('Session', () => {
   beforeEach(async () => {
-    await truncate();
-  });
-
-  it('should authenticate the user with the correct credentials', async () => {
-    const user = await User.create({
+    await User.create({
       name: 'João',
       email: 'joao@gmail.com',
       password: '123456',
     });
+  });
 
+  afterEach(async () => {
+    await truncate();
+  });
+
+  it('should authenticate the user with the correct credentials', async () => {
     const { body } = await request(app)
       .post('/sessions/')
       .send({
-        email: user.email,
-        password: user.password,
+        email: 'joao@gmail.com',
+        password: '123456',
       })
       .expect(200);
 
@@ -29,17 +31,11 @@ describe('Session', () => {
   });
 
   it('should not authenticate the user with the wrong password', async () => {
-    const user = await User.create({
-      name: 'João',
-      email: 'joao@gmail.com',
-      password: '123123',
-    });
-
     const { body } = await request(app)
       .post('/sessions/')
       .send({
-        email: user.email,
-        password: '123456',
+        email: 'joao@gmail.com',
+        password: '12345678',
       })
       .expect(401);
 
