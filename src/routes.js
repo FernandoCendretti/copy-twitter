@@ -3,6 +3,7 @@ import { Router } from 'express';
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import PostController from './app/controllers/PostController';
+import CommentsController from './app/controllers/CommentsController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -22,5 +23,7 @@ routes.get('/posts', PostController.getAll);
 routes.get('/posts/user', PostController.getUserPost);
 routes.put('/posts/:id', PostController.update);
 routes.delete('/posts/:id', PostController.delete);
+
+routes.post('/comments', CommentsController.store);
 
 export default routes;
