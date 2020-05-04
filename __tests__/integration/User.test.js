@@ -160,7 +160,7 @@ describe('User', () => {
   describe(' /GET', () => {
     it('should not uptade when token is not provide', async () => {
       const { body } = await request(app)
-        .put('/users')
+        .get('/users')
         .expect(401);
       expect(body.error).toBe('Token not provided');
     });
@@ -170,7 +170,7 @@ describe('User', () => {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.L8i6g3PfcHlioHCCPURC9pmXT7gdJpx3kOoyAfNUwCc';
 
       const { body } = await request(app)
-        .put('/users')
+        .get('/users')
         .set('Authorization', `Bearer ${token}`)
         .expect(401);
       expect(body.error).toBe('Token invalid');

@@ -50,6 +50,16 @@ class UserController {
 
     return res.json({ name, email });
   }
+
+  async delete(req, res) {
+    await User.destroy({
+      where: {
+        id: req.userId,
+      },
+    });
+
+    return res.json({ message: 'User deleted' });
+  }
 }
 
 export default new UserController();
