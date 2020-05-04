@@ -75,6 +75,10 @@ class PostController {
       ],
     });
 
+    if (!post) {
+      return res.status(400).json({ error: 'This post not exists' });
+    }
+
     if (post.user.id !== req.userId) {
       return res
         .status(401)

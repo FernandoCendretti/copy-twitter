@@ -33,7 +33,13 @@ class UserController {
   }
 
   async get(req, res) {
-    const { name, email } = await User.findByPk(req.userId);
+    const user = await User.findByPk(req.userId);
+
+    if (!user) {
+      return res.status(400).json({ error: 'User not exists' });
+    }
+
+    const { name, email } = user;
 
     return res.json({ name, email });
   }
@@ -42,6 +48,10 @@ class UserController {
     const { oldPassword } = req.body;
 
     const user = await User.findByPk(req.userId);
+
+    if (!user) {
+      return res.status(400).json({ error: 'This User not exists' });
+    }
 
     if (oldPassword && !(await user.checkPassword(oldPassword))) {
       return res.status(401).json({ error: 'Password does not match' });
