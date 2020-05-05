@@ -118,6 +118,18 @@ class PostController {
           as: 'user',
           attributes: ['id', 'name'],
         },
+        {
+          model: Comments,
+          as: 'comments',
+          attributes: ['id', 'comment'],
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'name'],
+            },
+          ],
+        },
       ],
       order: [['created_at', 'DESC']],
     });
