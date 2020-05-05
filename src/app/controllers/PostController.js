@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import Post from '../models/Post';
 import User from '../models/User';
 import Comments from '../models/Comments';
@@ -32,12 +31,14 @@ class PostController {
         {
           model: Comments,
           as: 'comments',
-          attributes: ['id', 'name'],
-          include: {
-            model: User,
-            as: 'user',
-            attributes: ['id, name'],
-          },
+          attributes: ['id', 'comment'],
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'name'],
+            },
+          ],
         },
       ],
       order: [['created_at', 'DESC']],
