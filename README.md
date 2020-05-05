@@ -5,7 +5,7 @@
 ## Instalação
 
 ```
-$ git clone https://github.com/FernandoCendretti/.git
+$ git clone https://github.com/FernandoCendretti/copy-twitter.git
 $ cd copy-twitter
 $ npm install || yarn
 ```
