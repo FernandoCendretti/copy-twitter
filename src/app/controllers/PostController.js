@@ -49,6 +49,11 @@ class PostController {
 
   async update(req, res) {
     const { id } = req.params;
+    const { content } = req.body;
+
+    if (content.length > 250) {
+      return res.status(403).json({ error: 'characters exceeded' });
+    }
 
     const post = await Post.findByPk(id, {
       include: [
@@ -70,7 +75,7 @@ class PostController {
         .json({ error: 'This post does not belong to this user' });
     }
 
-    const { content } = await post.update(req.body);
+    await post.update(req.body);
 
     return res.json({ content });
   }
