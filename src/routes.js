@@ -25,5 +25,6 @@ routes.put('/posts/:id', PostController.update);
 routes.delete('/posts/:id', PostController.delete);
 
 routes.post('/comments', CommentsController.store);
+routes.put('/comments/:id', CommentsController.update);
 
 export default routes;
